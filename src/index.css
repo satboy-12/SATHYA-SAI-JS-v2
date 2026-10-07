@@ -1,0 +1,96 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+@layer base {
+  :root {
+    --bg: #0D0A09;
+    --bg-surface: #14100E;
+    --bg-surface-elevated: #1B1513;
+    --txt: #E8D4C5;
+    --txt-muted: #C7B0A1;
+    --txt-dim: #8E7A6E;
+    --burgundy: #4A1717;
+    --terracotta: #A84C35;
+    --soft-orange: #C06A4B;
+    --border-hairline: rgba(232, 212, 197, 0.12);
+    --border-warm: rgba(168, 76, 53, 0.28);
+    --font-serif: 'Instrument Serif', 'Newsreader', Georgia, serif;
+    --font-serif-reading: 'Newsreader', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--txt);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: #A84C35;
+    color: #0D0A09;
+  }
+}
+
+/* Subtle warm organic paper grain texture overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Typographic utility classes */
+.font-serif-editorial {
+  font-family: var(--font-serif);
+}
+
+.font-serif-reading {
+  font-family: var(--font-serif-reading);
+}
+
+.font-sans-human {
+  font-family: var(--font-sans);
+}
+
+.font-mono-code {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subtle hairline dividers */
+.border-hairline {
+  border-color: rgba(232, 212, 197, 0.12);
+}
+
+.border-warm-accent {
+  border-color: rgba(168, 76, 53, 0.24);
+}
+
+/* Custom Scrollbar - quiet and refined */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0D0A09;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #231B17;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A84C35;
+}
