@@ -1,227 +1,240 @@
 import React, { useState } from 'react';
-import { Copy, Check, ArrowUpRight, Mail, Github, Linkedin, Send } from 'lucide-react';
+import { Copy, Check, ArrowUpRight, Mail, Phone, MessageSquare, Github, Linkedin, ExternalLink } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 
 interface ContactSectionProps {
-  onShowToast: (message: string) => void;
+  onShowToast?: (message: string) => void;
 }
 
-export const ContactSection: React.FC<ContactSectionProps> = ({ onShowToast }) => {
-  const [copied, setCopied] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export const ContactSection: React.FC<ContactSectionProps> = () => {
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
 
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(portfolioData.email);
-    setCopied(true);
-    onShowToast('Email address copied to clipboard');
-    setTimeout(() => setCopied(false), 2400);
+  const email = 'sathyasaijs12@gmail.com';
+  const phoneFormatted = '+91 73056 62449';
+  const phoneTel = 'tel:+917305662449';
+  const whatsappUrl = 'https://wa.me/917305662449';
+  const githubUrl = 'https://github.com/satboy-12';
+  const linkedinUrl = 'https://linkedin.com/in/sathyasaijs';
+
+  const handleCopyEmail = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(email);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCopyPhone = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
-      onShowToast('Please fill out all required fields.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      onShowToast('Thank you, Sathya will get back to you shortly.');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 600);
+    e.stopPropagation();
+    navigator.clipboard.writeText(phoneFormatted);
+    setCopiedPhone(true);
+    setTimeout(() => setCopiedPhone(false), 2000);
   };
 
   return (
     <section
       id="contact"
-      className="py-24 sm:py-32 lg:py-40 bg-[#0D0A09] text-[#E8D4C5] relative"
+      className="py-24 sm:py-32 lg:py-40 bg-[#0D0A09] text-[#E8D4C5] relative border-t border-[#E8D4C5]/10"
     >
-      <div className="max-w-[1320px] mx-auto px-6 sm:px-10">
+      <div className="max-w-[1100px] mx-auto px-6 sm:px-10">
         
-        {/* Editorial Sub-Index */}
+        {/* Editorial Sub-Index Header */}
         <div className="flex items-center justify-between pb-6 border-b border-[#E8D4C5]/10 text-xs font-mono-code uppercase tracking-[0.2em] text-[#C7B0A1]/80">
           <div className="flex items-center gap-3">
-            <span className="text-[#A84C35]">09</span>
+            <span className="text-[#A84C35]">07</span>
             <span className="text-[#E8D4C5]">CONTACT</span>
             <span className="text-[#E8D4C5]/30">/</span>
-            <span>GET IN TOUCH</span>
+            <span>DIRECT CHANNELS</span>
           </div>
-          <span className="hidden sm:inline text-[11px] text-[#C7B0A1]/60">
-            OPEN FOR OPPORTUNITIES
+          <span className="text-[11px] text-[#A84C35] font-mono-code">
+            CHENNAI, INDIA (IST)
           </span>
         </div>
 
-        {/* Big Editorial Headline */}
-        <div className="pt-12 pb-16 lg:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-          <div className="lg:col-span-8">
-            <h2 className="font-serif-editorial text-6xl sm:text-7xl md:text-8xl lg:text-[7.5rem] leading-[0.9] tracking-tight text-[#E8D4C5]">
-              LET'S WORK<br />
-              <span className="italic text-[#A84C35]">TOGETHER.</span>
+        {/* Large Editorial Headline & Subtitle */}
+        <div className="pt-12 pb-14 sm:pb-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+          <div className="lg:col-span-7">
+            <h2 className="font-serif-editorial text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] leading-[0.88] tracking-tight text-[#E8D4C5]">
+              LET'S<br />
+              <span className="italic text-[#A84C35]">TALK.</span>
             </h2>
           </div>
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-5 pb-2">
             <p className="font-serif-reading text-xl sm:text-2xl text-[#C7B0A1] italic leading-relaxed">
-              “Have an idea, project or opportunity? I'd love to hear about it.”
+              Have a project, idea, opportunity, or just want to connect?
             </p>
           </div>
         </div>
 
-        {/* Asymmetrical Content Grid: Direct Channels vs Working Inquiry Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 pt-8 border-t border-[#E8D4C5]/10">
+        {/* Thin divider */}
+        <div className="border-t border-[#E8D4C5]/15" />
+
+        {/* Direct Communication Channels Grid */}
+        <div className="py-12 sm:py-16 space-y-12">
           
-          {/* Left Column: Direct Communication Channels */}
-          <div className="lg:col-span-5 space-y-10">
-            <div className="space-y-4">
-              <span className="text-xs uppercase tracking-[0.25em] text-[#A84C35] font-semibold block">
-                Direct Communication
+          {/* Channel 1: EMAIL */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start sm:items-center py-6 border-b border-[#E8D4C5]/10">
+            <div className="md:col-span-3">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#A84C35] font-mono-code flex items-center gap-2">
+                <Mail size={13} className="text-[#A84C35]" />
+                EMAIL
               </span>
-              <p className="text-sm sm:text-base text-[#C7B0A1] leading-relaxed font-sans-human">
-                Feel free to email me directly or connect through GitHub and LinkedIn. I'm actively interested in cybersecurity engineering roles, full-stack web projects, and data analytics work.
-              </p>
             </div>
-
-            {/* Email Card with 1-Click Copy */}
-            <div className="p-6 sm:p-8 bg-[#14100E] border border-[#E8D4C5]/15 space-y-4">
-              <div className="text-[11px] uppercase tracking-[0.2em] text-[#C7B0A1]/70 font-mono-code">
-                Primary Email
-              </div>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <a
-                  href={`mailto:${portfolioData.email}`}
-                  className="font-serif-editorial text-xl sm:text-2xl text-[#E8D4C5] hover:text-[#A84C35] transition-colors break-all"
-                >
-                  {portfolioData.email}
-                </a>
-                <button
-                  type="button"
-                  onClick={handleCopyEmail}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-code uppercase tracking-wider text-[#E8D4C5] border border-[#E8D4C5]/20 hover:border-[#A84C35] hover:text-[#A84C35] transition-colors self-start sm:self-auto shrink-0"
-                >
-                  {copied ? <Check size={13} className="text-[#A84C35]" /> : <Copy size={13} />}
-                  <span>{copied ? 'Copied' : 'Copy'}</span>
-                </button>
-              </div>
+            <div className="md:col-span-5">
+              <a
+                href={`mailto:${email}`}
+                className="font-serif-editorial text-2xl sm:text-3xl text-[#E8D4C5] hover:text-[#A84C35] transition-colors break-all inline-block"
+              >
+                {email}
+              </a>
             </div>
-
-            {/* Social Channels List */}
-            <div className="space-y-3">
-              <span className="text-xs uppercase tracking-[0.2em] text-[#C7B0A1]/70 font-mono-code block">
-                Network & Repositories
-              </span>
-              <div className="divide-y divide-[#E8D4C5]/10 border-t border-b border-[#E8D4C5]/10 text-sm">
-                <a
-                  href="https://github.com/satboy-12"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="py-3.5 flex items-center justify-between group hover:text-[#A84C35] transition-colors"
-                >
-                  <span className="text-[#E8D4C5] group-hover:text-[#A84C35]">GitHub / satboy-12</span>
-                  <ArrowUpRight size={15} className="text-[#C7B0A1] group-hover:text-[#A84C35] transition-colors" />
-                </a>
-                <a
-                  href="https://linkedin.com/in/sathyasaijs"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="py-3.5 flex items-center justify-between group hover:text-[#A84C35] transition-colors"
-                >
-                  <span className="text-[#E8D4C5] group-hover:text-[#A84C35]">LinkedIn / in/sathyasaijs</span>
-                  <ArrowUpRight size={15} className="text-[#C7B0A1] group-hover:text-[#A84C35] transition-colors" />
-                </a>
-                <div className="py-3.5 flex items-center justify-between text-[#C7B0A1]">
-                  <span>Location: Chennai, Tamil Nadu, India</span>
-                  <span className="text-xs font-mono-code text-[#A84C35]">IST (UTC+5:30)</span>
-                </div>
-              </div>
+            <div className="md:col-span-4 flex items-center gap-3 pt-2 md:pt-0">
+              <a
+                href={`mailto:${email}`}
+                className="min-h-[44px] px-5 py-2.5 bg-[#E8D4C5] hover:bg-[#A84C35] text-[#0D0A09] hover:text-white text-xs uppercase tracking-[0.18em] font-semibold transition-colors inline-flex items-center justify-center gap-2"
+                aria-label="Send email to Sathya Sai JS"
+              >
+                <span>EMAIL ME</span>
+                <ArrowUpRight size={14} />
+              </a>
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="min-h-[44px] min-w-[44px] px-3.5 py-2.5 border border-[#E8D4C5]/20 hover:border-[#A84C35] text-[#E8D4C5] hover:text-[#A84C35] text-xs font-mono-code uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                aria-label="Copy email address"
+              >
+                {copiedEmail ? (
+                  <>
+                    <Check size={13} className="text-[#A84C35]" />
+                    <span className="text-[#A84C35] text-[11px]">Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={13} />
+                    <span className="text-[11px]">Copy</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
 
-          {/* Right Column: Grounded Human Inquiry Form */}
-          <div className="lg:col-span-7">
-            <div className="p-8 sm:p-10 lg:p-12 bg-[#14100E] border border-[#E8D4C5]/15 space-y-8">
-              <div className="border-b border-[#E8D4C5]/10 pb-4">
-                <h3 className="font-serif-editorial text-2xl sm:text-3xl text-[#E8D4C5]">
-                  Send a Direct Message
-                </h3>
-                <p className="text-xs sm:text-sm text-[#C7B0A1] mt-1 font-sans-human">
-                  Leave a note with your project scope, questions, or opportunity details.
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="block text-xs uppercase tracking-[0.16em] text-[#C7B0A1] font-mono-code">
-                      Your Name <span className="text-[#A84C35]">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g. Maya Chen"
-                      className="w-full bg-[#0D0A09] border border-[#E8D4C5]/20 focus:border-[#A84C35] px-4 py-3 text-sm text-[#E8D4C5] outline-none transition-colors"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="block text-xs uppercase tracking-[0.16em] text-[#C7B0A1] font-mono-code">
-                      Your Email <span className="text-[#A84C35]">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="e.g. maya@example.com"
-                      className="w-full bg-[#0D0A09] border border-[#E8D4C5]/20 focus:border-[#A84C35] px-4 py-3 text-sm text-[#E8D4C5] outline-none transition-colors"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-xs uppercase tracking-[0.16em] text-[#C7B0A1] font-mono-code">
-                    Subject / Area of Interest
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.subject}
-                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    placeholder="e.g. Web Development project / Security evaluation"
-                    className="w-full bg-[#0D0A09] border border-[#E8D4C5]/20 focus:border-[#A84C35] px-4 py-3 text-sm text-[#E8D4C5] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-xs uppercase tracking-[0.16em] text-[#C7B0A1] font-mono-code">
-                    Message <span className="text-[#A84C35]">*</span>
-                  </label>
-                  <textarea
-                    rows={4}
-                    required
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Tell me a bit about what you're working on..."
-                    className="w-full bg-[#0D0A09] border border-[#E8D4C5]/20 focus:border-[#A84C35] px-4 py-3 text-sm text-[#E8D4C5] outline-none transition-colors resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full sm:w-auto px-8 py-3.5 bg-[#E8D4C5] hover:bg-[#A84C35] text-[#0D0A09] hover:text-white text-xs uppercase tracking-[0.2em] font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                >
-                  <Send size={14} />
-                  <span>{isSubmitting ? 'Transmitting...' : 'Send Message'}</span>
-                </button>
-              </form>
+          {/* Channel 2: PHONE */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start sm:items-center py-6 border-b border-[#E8D4C5]/10">
+            <div className="md:col-span-3">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#A84C35] font-mono-code flex items-center gap-2">
+                <Phone size={13} className="text-[#A84C35]" />
+                PHONE
+              </span>
             </div>
+            <div className="md:col-span-5">
+              <a
+                href={phoneTel}
+                className="font-serif-editorial text-2xl sm:text-3xl text-[#E8D4C5] hover:text-[#A84C35] transition-colors inline-block"
+              >
+                {phoneFormatted}
+              </a>
+            </div>
+            <div className="md:col-span-4 flex items-center gap-3 pt-2 md:pt-0">
+              <a
+                href={phoneTel}
+                className="min-h-[44px] px-5 py-2.5 bg-[#E8D4C5] hover:bg-[#A84C35] text-[#0D0A09] hover:text-white text-xs uppercase tracking-[0.18em] font-semibold transition-colors inline-flex items-center justify-center gap-2"
+                aria-label="Call Sathya Sai JS"
+              >
+                <span>CALL ME</span>
+                <Phone size={13} />
+              </a>
+              <button
+                type="button"
+                onClick={handleCopyPhone}
+                className="min-h-[44px] min-w-[44px] px-3.5 py-2.5 border border-[#E8D4C5]/20 hover:border-[#A84C35] text-[#E8D4C5] hover:text-[#A84C35] text-xs font-mono-code uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                aria-label="Copy phone number"
+              >
+                {copiedPhone ? (
+                  <>
+                    <Check size={13} className="text-[#A84C35]" />
+                    <span className="text-[#A84C35] text-[11px]">Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={13} />
+                    <span className="text-[11px]">Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Channel 3: WHATSAPP */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start sm:items-center py-6 border-b border-[#E8D4C5]/10">
+            <div className="md:col-span-3">
+              <span className="text-xs uppercase tracking-[0.25em] text-[#A84C35] font-mono-code flex items-center gap-2">
+                <MessageSquare size={13} className="text-[#A84C35]" />
+                WHATSAPP
+              </span>
+            </div>
+            <div className="md:col-span-5">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-serif-editorial text-2xl sm:text-3xl text-[#E8D4C5] hover:text-[#A84C35] transition-colors inline-block"
+              >
+                {phoneFormatted}
+              </a>
+            </div>
+            <div className="md:col-span-4 flex items-center gap-3 pt-2 md:pt-0">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="min-h-[44px] px-5 py-2.5 bg-[#231A16] border border-[#A84C35]/40 hover:border-[#A84C35] hover:bg-[#A84C35] text-[#E8D4C5] hover:text-white text-xs uppercase tracking-[0.18em] font-semibold transition-colors inline-flex items-center justify-center gap-2"
+                aria-label="Message Sathya Sai JS on WhatsApp"
+              >
+                <span>MESSAGE ON WHATSAPP</span>
+                <ArrowUpRight size={14} />
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Social / Profiles Section */}
+        <div className="pt-8 pb-12 grid grid-cols-1 sm:grid-cols-2 gap-8 border-t border-[#E8D4C5]/15">
+          
+          {/* GitHub */}
+          <div className="p-6 bg-[#14100E] border border-[#E8D4C5]/10 hover:border-[#A84C35]/40 transition-colors">
+            <div className="text-[11px] font-mono-code uppercase tracking-[0.22em] text-[#C7B0A1]/70 mb-2 flex items-center gap-2">
+              <Github size={13} className="text-[#A84C35]" />
+              GITHUB
+            </div>
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-between text-base sm:text-lg font-serif-editorial text-[#E8D4C5] hover:text-[#A84C35] transition-colors"
+            >
+              <span>github.com/satboy-12</span>
+              <ArrowUpRight size={16} className="text-[#C7B0A1] group-hover:text-[#A84C35] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </a>
+          </div>
+
+          {/* LinkedIn */}
+          <div className="p-6 bg-[#14100E] border border-[#E8D4C5]/10 hover:border-[#A84C35]/40 transition-colors">
+            <div className="text-[11px] font-mono-code uppercase tracking-[0.22em] text-[#C7B0A1]/70 mb-2 flex items-center gap-2">
+              <Linkedin size={13} className="text-[#A84C35]" />
+              LINKEDIN
+            </div>
+            <a
+              href={linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-between text-base sm:text-lg font-serif-editorial text-[#E8D4C5] hover:text-[#A84C35] transition-colors"
+            >
+              <span>linkedin.com/in/sathyasaijs</span>
+              <ArrowUpRight size={16} className="text-[#C7B0A1] group-hover:text-[#A84C35] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </a>
           </div>
 
         </div>

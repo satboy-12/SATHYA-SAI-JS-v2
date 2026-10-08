@@ -132,7 +132,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume }) => {
               {/* Real Quick Links underneath portrait */}
               <div className="mt-4 flex items-center justify-between px-1 text-xs text-[#C7B0A1]">
                 <span className="text-[11px] uppercase tracking-[0.16em]">Direct channels</span>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <a
+                    href="https://wa.me/917305662449"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-[#E8D4C5] transition-colors flex items-center gap-1"
+                    aria-label="WhatsApp chat"
+                  >
+                    <span>WhatsApp</span>
+                    <ArrowUpRight size={12} />
+                  </a>
                   <a
                     href="https://github.com/satboy-12"
                     target="_blank"

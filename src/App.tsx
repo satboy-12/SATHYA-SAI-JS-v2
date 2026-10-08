@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SmoothScrollProvider } from './context/SmoothScrollProvider';
 import { ProgressBar } from './components/ProgressBar';
 import { Navbar } from './components/Navbar';
@@ -13,6 +13,7 @@ import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import { ResumeDossierModal } from './components/ResumeDossierModal';
 import { ProjectCaseStudyModal } from './components/ProjectCaseStudyModal';
+import { CinematicOpeningSequence } from './components/CinematicOpeningSequence';
 import { ProjectCaseStudy } from './types';
 
 export function App() {
@@ -20,6 +21,33 @@ export function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectCaseStudy | null>(null);
   const [toastMessage, setToastMessage] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
+
+  // Cinematic Intro state with sessionStorage memory
+  const [showIntro, setShowIntro] = useState<boolean>(() => {
+    try {
+      const alreadySeen = sessionStorage.getItem('sathya_cinematic_intro_seen');
+      return alreadySeen !== 'true';
+    } catch {
+      return true;
+    }
+  });
+  const [isReplay, setIsReplay] = useState<boolean>(false);
+
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+    setIsReplay(false);
+    try {
+      sessionStorage.setItem('sathya_cinematic_intro_seen', 'true');
+    } catch {
+      // Ignore storage restrictions
+    }
+  };
+
+  const handleReplayIntro = () => {
+    setIsReplay(true);
+    setShowIntro(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const showToast = (message: string) => {
     setToastMessage(message);
@@ -33,6 +61,14 @@ export function App() {
     <SmoothScrollProvider>
       <div className="min-h-screen bg-[#0D0A09] text-[#E8D4C5] font-sans-human selection:bg-[#A84C35] selection:text-[#0D0A09] relative overflow-x-hidden">
         
+        {/* Real-time Cinematic 3D Opening Sequence (Storyboard Keyframes 01 to 10) */}
+        {showIntro && (
+          <CinematicOpeningSequence
+            onComplete={handleIntroComplete}
+            isReplay={isReplay}
+          />
+        )}
+
         {/* Subtle Scroll Progress Indicator */}
         <ProgressBar />
 
@@ -50,8 +86,8 @@ export function App() {
           <ContactSection onShowToast={showToast} />
         </main>
 
-        {/* Minimal Footer */}
-        <Footer />
+        {/* Minimal Footer with Direct Communication & Replay Option */}
+        <Footer onReplayIntro={handleReplayIntro} />
 
         {/* Notification Toast */}
         <Toast message={toastMessage} isVisible={isToastVisible} />

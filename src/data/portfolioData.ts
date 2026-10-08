@@ -132,7 +132,7 @@ export const portfolioData: PortfolioData = {
   age: "--",
   location: "Chennai, Tamil Nadu, India",
   email: "sathyasaijs12@gmail.com",
-  phone: "+91 7305662449",
+  phone: "+91 73056 62449",
   photo: "/images/sathya-portfolio-photo.jpg",
   secondaryPhoto: "/images/sathya-image-1.jpg",
   aboutText: "I'm a Web & App Developer, Cyber Security Engineer and Data Analyst. I enjoy building practical digital products, working with technology and understanding how systems can be made more secure and useful. Currently pursuing my B.E. in Cyber Security at Sri Ram Engineering College, following a diploma in Electronics & Communication (86%). I focus on creating reliable software, assessing security risks, and turning data into clear decisions.",
