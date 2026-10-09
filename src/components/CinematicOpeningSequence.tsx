@@ -131,7 +131,7 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
     };
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0d0a09);
+    scene.background = null;
     scene.fog = new THREE.FogExp2(0x0d0a09, 0.025);
 
     const camera = new THREE.PerspectiveCamera(
@@ -144,7 +144,7 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
 
     try {
       renderer = new THREE.WebGLRenderer({
-        alpha: false,
+        alpha: true,
         antialias: !isMobile,
         powerPreference: 'high-performance',
       });
@@ -155,6 +155,7 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
       return;
     }
 
+    renderer.setClearColor(0x0d0a09, 0);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 1.5));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
