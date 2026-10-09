@@ -29,6 +29,7 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
   const skipFromTimeRef = useRef(0);
 
   const [progress, setProgress] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isSkipping, setIsSkipping] = useState(false);
   const [isAudioMuted, setIsAudioMuted] = useState(true);
 
@@ -111,6 +112,12 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
 
     let renderer: THREE.WebGLRenderer | null = null;
     let rafId = 0;
+    let isDisposed = false;
+    let loadedTextureCount = 0;
+    const markTextureReady = () => {
+      loadedTextureCount += 1;
+      if (loadedTextureCount >= 3 && !isDisposed) setIsLoaded(true);
+    };
     let elapsedSeconds = 0;
     let lastTimestamp = 0;
     let lastUiUpdate = 0;
@@ -221,9 +228,9 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
     // Three pre-rendered views allow a continuous blended turn without the old
     // "paper-thin plane" effect that happened when a single image rotated edge-on.
     const textureLoader = new THREE.TextureLoader();
-    const frontTexture = textureLoader.load('/images/sathya_3d_front.jpg');
-    const sideTexture = textureLoader.load('/images/sathya_3d_side.jpg');
-    const backTexture = textureLoader.load('/images/sathya_3d_back.jpg');
+    const frontTexture = textureLoader.load('/images/sathya_3d_front.jpg', markTextureReady, undefined, markTextureReady);
+    const sideTexture = textureLoader.load('/images/sathya_3d_side.jpg', markTextureReady, undefined, markTextureReady);
+    const backTexture = textureLoader.load('/images/sathya_3d_back.jpg', markTextureReady, undefined, markTextureReady);
 
     [frontTexture, sideTexture, backTexture].forEach((texture) => {
       texture.colorSpace = THREE.SRGBColorSpace;
@@ -303,6 +310,14 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
 
     const animate = (timestamp: number) => {
       rafId = window.requestAnimationFrame(animate);
+
+      // Do not start the clock until the three character views are ready.
+      // This avoids an empty first reveal on slow connections.
+      if (loadedTextureCount < 3) {
+        lastTimestamp = timestamp;
+        renderer?.render(scene, camera);
+        return;
+      }
 
       if (lastTimestamp === 0) lastTimestamp = timestamp;
       const delta = Math.min((timestamp - lastTimestamp) / 1000, 0.05);
@@ -433,6 +448,7 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
     rafId = window.requestAnimationFrame(animate);
 
     return () => {
+      isDisposed = true;
       if (rafId) window.cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
@@ -499,6 +515,17 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
         }}
         aria-hidden="true"
       />
+
+      {!isLoaded && (
+        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-4 bg-[#0D0A09]">
+          <div className="font-serif-editorial text-xl sm:text-2xl tracking-tight text-[#E8D4C5]">SATHYA SAI JS</div>
+          <div className="text-[10px] font-mono-code uppercase tracking-[0.28em] text-[#A84C35]">PREPARING THE EXPERIENCE</div>
+          <div className="h-px w-40 overflow-hidden bg-[#E8D4C5]/10">
+            <div className="h-full w-1/3 animate-pulse bg-[#C06A4B]" />
+          </div>
+        </div>
+      )}
+
       <div
         className="absolute inset-0 z-20 pointer-events-none mix-blend-screen"
         style={{
