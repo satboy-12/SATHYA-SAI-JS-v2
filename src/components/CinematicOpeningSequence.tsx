@@ -93,11 +93,6 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
     if (!isLoaded) return;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && !isReplay) {
-      try {
-        sessionStorage.setItem('sathya_cinematic_intro_seen', 'true');
-      } catch {
-        // Storage may be unavailable in private browsing.
-      }
       onCompleteRef.current();
       return;
     }
@@ -116,11 +111,6 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
     const finish = () => {
       if (completedRef.current) return;
       completedRef.current = true;
-      try {
-        sessionStorage.setItem('sathya_cinematic_intro_seen', 'true');
-      } catch {
-        // Storage is optional.
-      }
       onCompleteRef.current();
     };
 

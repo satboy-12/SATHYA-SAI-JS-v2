@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { SmoothScrollProvider } from './context/SmoothScrollProvider';
 import { ProgressBar } from './components/ProgressBar';
 import { Navbar } from './components/Navbar';
@@ -22,25 +22,13 @@ export function App() {
   const [toastMessage, setToastMessage] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
 
-  // Cinematic Intro state with sessionStorage memory
-  const [showIntro, setShowIntro] = useState<boolean>(() => {
-    try {
-      const alreadySeen = sessionStorage.getItem('sathya_cinematic_intro_seen');
-      return alreadySeen !== 'true';
-    } catch {
-      return true;
-    }
-  });
+  // Show the cinematic intro on every fresh page load, including refreshes.
+  const [showIntro, setShowIntro] = useState<boolean>(true);
   const [isReplay, setIsReplay] = useState<boolean>(false);
 
   const handleIntroComplete = () => {
     setShowIntro(false);
     setIsReplay(false);
-    try {
-      sessionStorage.setItem('sathya_cinematic_intro_seen', 'true');
-    } catch {
-      // Ignore storage restrictions
-    }
   };
 
   const handleReplayIntro = () => {
