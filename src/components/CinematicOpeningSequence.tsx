@@ -116,11 +116,6 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
     const finish = () => {
       if (completedRef.current) return;
       completedRef.current = true;
-      try {
-        sessionStorage.setItem('sathya_cinematic_intro_seen', 'true');
-      } catch {
-        // Storage is optional.
-      }
       onCompleteRef.current();
     };
 
