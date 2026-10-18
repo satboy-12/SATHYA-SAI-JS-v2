@@ -33,6 +33,18 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
   const [isAudioMuted, setIsAudioMuted] = useState(true);
 
   useEffect(() => {
+    // Handle cached images whose load event fired before this component subscribed,
+    // and never leave the opening screen blocking the portfolio if loading stalls.
+    const image = document.querySelector<HTMLImageElement>('img[src="' + PORTRAIT_SRC + '"]');
+    if (image?.complete) {
+      setIsLoaded(true);
+      return;
+    }
+    const fallback = window.setTimeout(() => setIsLoaded(true), 1800);
+    return () => window.clearTimeout(fallback);
+  }, []);
+
+  useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
 
