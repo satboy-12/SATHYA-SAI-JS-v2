@@ -19,7 +19,7 @@ const skillSets = [
 export function App() {
  const [intro,setIntro]=useState(()=>{
   if(typeof window==='undefined') return false;
-  try { return !window.localStorage.getItem('sathya-portfolio-intro-seen') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  try { return !window.localStorage.getItem('sathya-portfolio-intro-seen-v2') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
   catch { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
  });
  const completeIntro=()=>{
@@ -31,7 +31,7 @@ export function App() {
  const [menuOpen,setMenuOpen]=useState(false);
  const [copied,setCopied]=useState(false);
  const [active,setActive]=useState('hero');
- useEffect(()=>{const observer=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');if(entry.target.id)setActive(entry.target.id)}})},{threshold:0.12,rootMargin:'0px 0px -8% 0px'});document.querySelectorAll('.reveal, section[id]').forEach((node)=>observer.observe(node));return()=>observer.disconnect()},[intro]);
+ useEffect(()=>{const targets=Array.from(document.querySelectorAll<HTMLElement>('.reveal, section[id]'));const markVisible=(node:HTMLElement)=>{node.classList.add('is-visible');if(node.id)setActive(node.id)};if(!('IntersectionObserver' in window)){targets.forEach(markVisible);return;}const observer=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){markVisible(entry.target as HTMLElement);observer.unobserve(entry.target)}})},{threshold:0.08,rootMargin:'0px 0px -5% 0px'});targets.forEach((node)=>observer.observe(node));return()=>observer.disconnect()},[intro]);
  const copyEmail=async()=>{try{await navigator.clipboard.writeText(portfolioData.email);setCopied(true);window.setTimeout(()=>setCopied(false),1800)}catch{window.location.href='mailto:'+portfolioData.email}};
  return <SmoothScrollProvider><div className="portfolio-shell">
  {intro&&<CinematicOpeningSequence onComplete={completeIntro}/>}<ProgressBar/>
