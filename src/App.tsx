@@ -23,7 +23,7 @@ export function App() {
   catch { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
  });
  const completeIntro=()=>{
-  try { window.localStorage.setItem('sathya-portfolio-intro-seen','1'); } catch { /* Storage may be disabled; continue without blocking the site. */ }
+  try { window.localStorage.setItem('sathya-portfolio-intro-seen-v2','1'); } catch { /* Storage may be disabled; continue without blocking the site. */ }
   setIntro(false);
  };
  const [resumeOpen,setResumeOpen]=useState(false);
