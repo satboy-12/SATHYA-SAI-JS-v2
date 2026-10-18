@@ -1,99 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { ArrowUpRight, Github, Linkedin, Mail, Menu, X, ShieldCheck, Code2, ChartNoAxesCombined, Terminal, MapPin, Check, GraduationCap } from 'lucide-react';
 import { SmoothScrollProvider } from './context/SmoothScrollProvider';
 import { ProgressBar } from './components/ProgressBar';
-import { Navbar } from './components/Navbar';
-import { HeroSection } from './components/HeroSection';
-import { AboutSection } from './components/AboutSection';
-import { WhatIDoSection } from './components/WhatIDoSection';
-import { SkillsSection } from './components/SkillsSection';
-import { ProjectsSection } from './components/ProjectsSection';
-import { JourneySection } from './components/JourneySection';
-import { ContactSection } from './components/ContactSection';
-import { Footer } from './components/Footer';
-import { Toast } from './components/Toast';
+import { CinematicOpeningSequence } from './components/CinematicOpeningSequence';
 import { ResumeDossierModal } from './components/ResumeDossierModal';
 import { ProjectCaseStudyModal } from './components/ProjectCaseStudyModal';
-import { CinematicOpeningSequence } from './components/CinematicOpeningSequence';
 import { ProjectCaseStudy } from './types';
+import { portfolioData, whatIDoData, educationData, certificationsData, editorialSkills } from './data/portfolioData';
+
+const links = [{name:'About',id:'about'},{name:'Expertise',id:'what-i-do'},{name:'Skills',id:'skills'},{name:'Work',id:'work'},{name:'Journey',id:'experience'},{name:'Contact',id:'contact'}];
+const skillSets = [
+ {name:'Cybersecurity',label:'01 / DEFEND',items:editorialSkills.cybersecurity,Icon:ShieldCheck},
+ {name:'Development',label:'02 / BUILD',items:editorialSkills.development,Icon:Code2},
+ {name:'Programming',label:'03 / ENGINEER',items:editorialSkills.programming,Icon:Terminal},
+ {name:'Data & Analytics',label:'04 / DISCOVER',items:editorialSkills.data,Icon:ChartNoAxesCombined}
+];
 
 export function App() {
-  const [isResumeOpen, setIsResumeOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<ProjectCaseStudy | null>(null);
-  const [toastMessage, setToastMessage] = useState('');
-  const [isToastVisible, setIsToastVisible] = useState(false);
-
-  // Show the cinematic intro on every fresh page load, including refreshes.
-  const [showIntro, setShowIntro] = useState<boolean>(true);
-  const [isReplay, setIsReplay] = useState<boolean>(false);
-
-  const handleIntroComplete = () => {
-    setShowIntro(false);
-    setIsReplay(false);
-  };
-
-  const handleReplayIntro = () => {
-    setIsReplay(true);
-    setShowIntro(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const showToast = (message: string) => {
-    setToastMessage(message);
-    setIsToastVisible(true);
-    setTimeout(() => {
-      setIsToastVisible(false);
-    }, 3200);
-  };
-
-  return (
-    <SmoothScrollProvider>
-      <div className="min-h-screen bg-[#0D0A09] text-[#E8D4C5] font-sans-human selection:bg-[#A84C35] selection:text-[#0D0A09] relative overflow-x-hidden">
-        
-        {/* Real-time Cinematic 3D Opening Sequence (Storyboard Keyframes 01 to 10) */}
-        {showIntro && (
-          <CinematicOpeningSequence
-            onComplete={handleIntroComplete}
-            isReplay={isReplay}
-          />
-        )}
-
-        {/* Subtle Scroll Progress Indicator */}
-        <ProgressBar />
-
-        {/* Minimal Editorial Navigation */}
-        <Navbar onOpenResume={() => setIsResumeOpen(true)} />
-
-        {/* Primary Editorial Sections */}
-        <main id="app" className="relative z-10">
-          <HeroSection onOpenResume={() => setIsResumeOpen(true)} />
-          <AboutSection />
-          <WhatIDoSection />
-          <SkillsSection />
-          <ProjectsSection onOpenCaseStudy={(proj) => setSelectedProject(proj)} />
-          <JourneySection />
-          <ContactSection onShowToast={showToast} />
-        </main>
-
-        {/* Minimal Footer with Direct Communication & Replay Option */}
-        <Footer onReplayIntro={handleReplayIntro} />
-
-        {/* Notification Toast */}
-        <Toast message={toastMessage} isVisible={isToastVisible} />
-
-        {/* Full Dossier Résumé Modal */}
-        <ResumeDossierModal
-          isOpen={isResumeOpen}
-          onClose={() => setIsResumeOpen(false)}
-        />
-
-        {/* Case Study Modal */}
-        <ProjectCaseStudyModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      </div>
-    </SmoothScrollProvider>
-  );
+ const [intro,setIntro]=useState(true);
+ const [resumeOpen,setResumeOpen]=useState(false);
+ const [chosenProject,setChosenProject]=useState<ProjectCaseStudy|null>(null);
+ const [menuOpen,setMenuOpen]=useState(false);
+ const [copied,setCopied]=useState(false);
+ const [active,setActive]=useState('hero');
+ useEffect(()=>{const observer=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');if(entry.target.id)setActive(entry.target.id)}})},{threshold:0.12,rootMargin:'0px 0px -8% 0px'});document.querySelectorAll('.reveal, section[id]').forEach((node)=>observer.observe(node));return()=>observer.disconnect()},[intro]);
+ const copyEmail=async()=>{try{await navigator.clipboard.writeText(portfolioData.email);setCopied(true);window.setTimeout(()=>setCopied(false),1800)}catch{window.location.href='mailto:'+portfolioData.email}};
+ return <SmoothScrollProvider><div className="portfolio-shell">
+ {intro&&<CinematicOpeningSequence onComplete={()=>setIntro(false)}/>}<ProgressBar/>
+ <header className="new-header"><a className="new-brand" href="#hero"><span className="brand-monogram">S<span>.</span></span><span>SATHYA SAI JS<small>DEVELOPER / SECURITY / DATA</small></span></a><nav className={menuOpen?'new-nav nav-open':'new-nav'}>{links.map((link,index)=><a key={link.id} className={active===link.id?'nav-active':''} href={'#'+link.id} onClick={()=>setMenuOpen(false)}><small>0{index+1}</small>{link.name}</a>)}<button onClick={()=>setResumeOpen(true)}>Résumé <ArrowUpRight size={15}/></button></nav><button className="new-menu" onClick={()=>setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen?<X/>:<Menu/>}</button></header>
+ <main>
+ <section id="hero" className="new-hero"><div className="hero-overline"><span><i/> OPEN TO LEARNING & OPPORTUNITIES</span><span>CHENNAI, INDIA / IST</span></div><div className="new-hero-grid"><div className="new-hero-copy"><p className="new-eyebrow">A PRACTICAL MINDSET FOR DIGITAL PROBLEMS</p><h1>Curious by<br/>nature. <em>Built</em><br/>to <span>solve.</span></h1><p className="new-intro">I'm <b>Sathya Sai JS</b> — a developer and Cyber Security student who enjoys turning complex ideas into useful, thoughtful digital experiences.</p><div className="new-actions"><a className="accent-button" href="#work">Explore my work <ArrowUpRight size={17}/></a><button className="text-button" onClick={()=>setResumeOpen(true)}>View résumé ↗</button></div><div className="new-socials"><a href="https://github.com/satboy-12" target="_blank" rel="noreferrer"><Github/> GitHub</a><a href="https://www.linkedin.com/in/sathya-sai-j-s-1187b5399" target="_blank" rel="noreferrer"><Linkedin/> LinkedIn</a><a href={'mailto:'+portfolioData.email}><Mail/> Email</a></div></div><div className="new-portrait-wrap"><div className="new-portrait"><img src="/images/sathya-portfolio-photo.jpg" alt="Sathya Sai JS" fetchPriority="high"/><span className="portrait-badge">LEARN<br/>BUILD<br/>REFINE</span><div className="portrait-bottom"><span>FIG. 01</span><span>IN PROGRESS, ALWAYS.</span></div></div><div className="portrait-orbit"/><div className="portrait-note">THOUGHTFUL WORK.<br/><b>PRACTICAL IMPACT.</b></div></div></div><div className="hero-foot"><span>↓ SCROLL TO EXPLORE</span><span>BUILD WITH INTENTION. KEEP GETTING BETTER.</span><span>© 2026</span></div></section>
+ <section id="about" className="new-section"><div className="section-label"><span>01 / ABOUT</span><span>A LITTLE CONTEXT</span></div><div className="new-two-col"><h2>Technology is<br/>better when it<br/><em>means something.</em></h2><div className="about-copy"><p className="big-copy">{portfolioData.aboutText}</p><p>My interests sit at the intersection of software development, cybersecurity, and data analytics. I like understanding how things work, improving the rough edges, and making technology easier to use.</p><div className="about-points"><div><small>01</small><b>Build</b><span>Web, app & automation projects</span></div><div><small>02</small><b>Protect</b><span>Security fundamentals & analysis</span></div><div><small>03</small><b>Understand</b><span>Data, patterns & clear reporting</span></div></div></div></div></section>
+ <section id="what-i-do" className="new-section"><div className="section-label"><span>02 / EXPERTISE</span><span>WHAT I BRING TO THE TABLE</span></div><div className="section-title-row"><h2>Different lenses.<br/><em>One mindset.</em></h2><p>Four connected areas shaped by coursework, hands-on projects, and consistent practice.</p></div><div className="new-expertise">{whatIDoData.map((item,index)=>{const Icon=[ShieldCheck,Code2,ChartNoAxesCombined,Terminal][index];return <article className="new-expertise-card reveal" key={item.number}><div className="expertise-top"><span>{item.number} / 04</span><Icon/></div><h3>{item.title==='CYBER SECURITY'?'Cybersecurity':item.title==='WEB & APP DEVELOPMENT'?'Web & App Development':item.title==='DATA ANALYTICS'?'Data Analytics':'Software & Technology'}</h3><p>{item.summary}</p><div className="new-tags">{item.tags.map(tag=><span key={tag}>{tag}</span>)}</div><ArrowUpRight className="expertise-arrow"/></article>})}</div></section>
+ <section id="skills" className="new-section"><div className="section-label"><span>03 / TOOLKIT</span><span>SKILLS IN PRACTICE</span></div><div className="section-title-row"><h2>The tools are<br/><em>only the start.</em></h2><p>A practical foundation across languages, frameworks, security concepts, and analytics tools. The best tool is the one that solves the right problem.</p></div><div className="new-skills">{skillSets.map(({name,label,items,Icon})=><article className="new-skill-card reveal" key={name}><div><Icon/><small>{label}</small></div><h3>{name}</h3><div className="new-tags">{items.map(item=><span key={item}>{item}</span>)}</div></article>)}</div></section>
+ <section id="work" className="new-section"><div className="section-label"><span>04 / SELECTED WORK</span><span>PROJECTS & EXPERIMENTS</span></div><div className="section-title-row"><h2>Less talk.<br/><em>More making.</em></h2><p>Practical projects exploring data workflows, software experiences, and technical problem-solving. Open a case study for more detail.</p></div><div className="new-projects">{portfolioData.projects.map((project,index)=><article className="new-project reveal" key={project.id}><div className="project-index">0{index+1}<small>PROJECT</small></div><div className="project-info"><small className="project-category">{project.category}</small><h3>{project.name}</h3><p>{project.description||project.desc}</p><div className="new-tags">{(project.tags||project.tech||[]).slice(0,5).map(tag=><span key={tag}>{tag}</span>)}</div><button onClick={()=>setChosenProject(project)}>Explore case study <ArrowUpRight size={16}/></button></div><div className="project-visual">{project.image?<img src={project.image} alt="" loading="lazy"/>:<div className="project-placeholder"><Code2/><small>PROJECT / {project.number}</small></div>}<span>SS—{project.number}</span></div></article>)}</div></section>
+ <section id="experience" className="new-section"><div className="section-label"><span>05 / JOURNEY</span><span>LEARNING IS THE WORK</span></div><div className="journey-columns"><div><h2>Still learning.<br/><em>Always building.</em></h2><p>My path so far is shaped by formal study, hands-on technical work, and a desire to keep exploring.</p></div><div className="new-timeline">{portfolioData.experience.map(item=><article className="timeline-entry reveal" key={item.year+item.title}><small>{item.year}</small><div><h3>{item.title}</h3><b>{item.subtitle||item.type}</b><p>{item.description||item.desc}</p></div></article>)}</div></div><div className="education-heading"><GraduationCap/><span>EDUCATION</span></div><div className="new-education">{educationData.map(item=><article className="reveal" key={item.degree}><small>{item.period}</small><h3>{item.degree}</h3><b>{item.institution}</b><p>{item.scoreOrDetail}</p></article>)}</div><div className="education-heading"><Check/><span>CERTIFICATIONS & FOUNDATIONS</span></div><div className="new-certifications">{certificationsData.map(item=><div key={item.name}><Check/><span><b>{item.name}</b><small>{item.issuer} · {item.focus}</small></span></div>)}</div></section>
+ <section id="contact" className="new-contact"><div className="section-label"><span>06 / SAY HELLO</span><span>GOOD THINGS START WITH A CONVERSATION</span></div><p className="new-eyebrow">HAVE A PROJECT OR AN OPPORTUNITY?</p><h2>Let's make<br/><em>something</em><br/>useful.</h2><p className="contact-text">I'm always glad to connect with people who are building, learning, or solving interesting problems.</p><div className="new-actions"><a className="accent-button" href={'mailto:'+portfolioData.email}>Start a conversation <ArrowUpRight/></a><button className="text-button" onClick={copyEmail}>{copied?'✓ Email copied':'Copy email ↗'}</button></div><div className="new-contact-bottom"><span><MapPin/> Chennai, Tamil Nadu, India</span><a href="https://github.com/satboy-12" target="_blank" rel="noreferrer"><Github/> GitHub</a><a href="https://www.linkedin.com/in/sathya-sai-j-s-1187b5399" target="_blank" rel="noreferrer"><Linkedin/> LinkedIn</a></div></section>
+ </main><footer className="new-footer"><a href="#hero">SATHYA SAI JS<span>.</span></a><small>DESIGNED WITH INTENTION · BUILT TO KEEP EVOLVING</small><a href="#hero">BACK TO TOP ↑</a><small>© {new Date().getFullYear()} Sathya Sai JS</small></footer>
+ <ResumeDossierModal isOpen={resumeOpen} onClose={()=>setResumeOpen(false)}/><ProjectCaseStudyModal project={chosenProject} onClose={()=>setChosenProject(null)}/></div></SmoothScrollProvider>;
 }
-
 export default App;
