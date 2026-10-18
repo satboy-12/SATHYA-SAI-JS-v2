@@ -19,14 +19,14 @@ interface SmoothScrollContextType {
   setIsSnappingEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SECTIONS = ['home', 'about', 'lab', 'skills', 'projects', 'journey', 'contact'];
+const SECTIONS = ['hero', 'about', 'what-i-do', 'skills', 'work', 'experience', 'contact'];
 
 const defaultScrollState: ScrollState = {
   scrollY: 0,
   progress: 0,
   velocity: 0,
   direction: 1,
-  activeSection: 'home',
+  activeSection: 'hero',
 };
 
 const SmoothScrollContext = createContext<SmoothScrollContextType>({
@@ -73,7 +73,7 @@ export const SmoothScrollProvider: React.FC<SmoothScrollProviderProps> = ({ chil
         const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
         const p = totalHeight > 0 ? y / totalHeight : 0;
 
-        let currentSection = 'home';
+        let currentSection = 'hero';
         for (const id of SECTIONS) {
           const el = document.getElementById(id);
           if (el) {
