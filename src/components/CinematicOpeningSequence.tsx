@@ -134,7 +134,7 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
       }
 
       const normalizedProgress = clamp01(elapsedSeconds / INTRO_DURATION);
-      if (timestamp - lastUiUpdate >= 42 || normalizedProgress >= 1) {
+      if (timestamp - lastUiUpdate >= 16 || normalizedProgress >= 1) {
         lastUiUpdate = timestamp;
         setProgress(normalizedProgress);
       }
@@ -179,6 +179,9 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
         ? lerp(1, 1.045, (currentSec - 4.8) / 3)
         : lerp(1.045, 1.015, (currentSec - 7.8) / 1.6);
   const portraitShiftX = currentSec < 3.1 ? lerp(5, 0, (currentSec - 1.85) / 1.25) : 0;
+  const lightSweepProgress = clamp01((currentSec - 2.25) / 1.9);
+  const lightSweepOpacity = clamp01((currentSec - 2.25) / 0.3) * clamp01((4.45 - currentSec) / 0.45) * 0.24;
+  const lightSweepX = lerp(-120, 120, easeInOut(lightSweepProgress));
   const giantNameOpacity =
     clamp01((currentSec - 4.7) / 0.55) *
     (currentSec < 8.55 ? 1 : clamp01((9.4 - currentSec) / 0.85));
@@ -238,6 +241,19 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
           WebkitMaskImage:
             'linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.55) 12%, black 29%, black 84%, rgba(0,0,0,0.8) 100%)',
         }}
+      />
+
+      <div
+        className="absolute inset-y-0 z-[11] w-[34vw] min-w-40 max-w-[440px] pointer-events-none mix-blend-screen"
+        style={{
+          left: `${lightSweepX}%`,
+          opacity: lightSweepOpacity,
+          transform: 'skewX(-12deg)',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(232,212,197,0.02) 18%, rgba(232,212,197,0.32) 50%, rgba(192,106,75,0.08) 68%, transparent 100%)',
+          filter: 'blur(8px)',
+          willChange: 'left, opacity',
+        }}
+        aria-hidden="true"
       />
 
       <div
@@ -328,9 +344,9 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
             opacity: giantNameOpacity,
             transform: 'translate(-50%, -50%) scale(' + giantNameScale + ')',
           }}
-          className="absolute left-1/2 top-1/2 z-[20] flex w-full items-center justify-between gap-2 px-4 sm:px-10 md:px-16 pointer-events-none"
+          className="absolute left-1/2 top-1/2 z-[20] flex w-full flex-col items-start justify-center gap-0 px-7 sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:px-10 md:px-16 pointer-events-none"
         >
-          <h1 className="font-serif-editorial text-[clamp(2.35rem,7.4vw,10rem)] font-normal leading-none tracking-[-0.045em] text-[#E8D4C5]/90">
+          <h1 className="font-serif-editorial text-[clamp(2.7rem,8vw,10rem)] font-normal leading-[0.88] tracking-[-0.045em] text-[#E8D4C5]/90">
             SATHYA
           </h1>
           <h1 className="font-serif-editorial text-[clamp(2.35rem,7.4vw,10rem)] font-normal leading-none tracking-[-0.045em] text-[#E8D4C5]/90">
@@ -407,7 +423,7 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 z-40 h-[2px] bg-[#E8D4C5]/10">
-        <div style={{ width: progress * 100 + '%' }} className="h-full bg-[#A84C35]" />
+        <div style={{ width: progress * 100 + '%' }} className="h-full bg-gradient-to-r from-[#A84C35] via-[#C06A4B] to-[#E8D4C5]" />
       </div>
     </div>
   );
