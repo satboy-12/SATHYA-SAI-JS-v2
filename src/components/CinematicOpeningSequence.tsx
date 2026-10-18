@@ -225,6 +225,17 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
         aria-hidden="true"
       />
 
+      <div
+        className="absolute right-[-8%] top-[12%] z-[8] h-[70vh] w-[70vw] max-w-[900px] rounded-full pointer-events-none"
+        style={{
+          opacity: portraitReveal * 0.72,
+          background: 'radial-gradient(ellipse at center, rgba(168,76,53,0.22) 0%, rgba(192,106,75,0.08) 38%, transparent 72%)',
+          filter: 'blur(42px)',
+          transform: `scale(${portraitScale})`,
+        }}
+        aria-hidden="true"
+      />
+
       <img
         src={PORTRAIT_SRC}
         alt="Sathya Sai JS"
@@ -342,15 +353,19 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
         <div
           style={{
             opacity: giantNameOpacity,
-            transform: 'translate(-50%, -50%) scale(' + giantNameScale + ')',
+            transform: 'translateY(-50%) scale(' + giantNameScale + ')',
           }}
-          className="absolute left-1/2 top-1/2 z-[20] flex w-full flex-col items-start justify-center gap-0 px-7 sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:px-10 md:px-16 pointer-events-none"
+          className="absolute left-0 top-[49%] z-[20] flex w-full flex-col items-start justify-center gap-0 px-6 sm:px-10 md:px-16 pointer-events-none"
         >
-          <h1 className="font-serif-editorial text-[clamp(2.7rem,8vw,10rem)] font-normal leading-[0.88] tracking-[-0.045em] text-[#E8D4C5]/90">
+          <div className="mb-3 flex items-center gap-3 text-[9px] sm:text-[10px] font-mono-code uppercase tracking-[0.24em] text-[#C7B0A1]/80">
+            <span className="h-px w-7 bg-[#C06A4B]" />
+            <span>PERSONAL PORTFOLIO · 2026</span>
+          </div>
+          <h1 className="font-serif-editorial text-[clamp(3.15rem,9.8vw,9.4rem)] font-normal leading-[0.78] tracking-[-0.055em] text-[#E8D4C5] drop-shadow-[0_4px_28px_rgba(13,10,9,0.48)]">
             SATHYA
           </h1>
-          <h1 className="font-serif-editorial text-[clamp(2.35rem,7.4vw,10rem)] font-normal leading-none tracking-[-0.045em] text-[#E8D4C5]/90">
-            SAI JS
+          <h1 className="mt-2 font-serif-editorial text-[clamp(3.15rem,9.8vw,9.4rem)] font-normal italic leading-[0.82] tracking-[-0.055em] text-[#C06A4B] drop-shadow-[0_4px_28px_rgba(13,10,9,0.48)]">
+            SAI JS<span className="text-[#E8D4C5]/75">.</span>
           </h1>
         </div>
       )}
@@ -374,7 +389,7 @@ export const CinematicOpeningSequence: React.FC<CinematicOpeningSequenceProps> =
       {currentSec >= 6.45 && currentSec < 9.25 && (
         <div
           style={{ opacity: statementOpacity }}
-          className="absolute left-6 right-6 sm:left-12 sm:right-auto md:left-20 top-[72%] sm:top-1/2 z-30 max-w-xs sm:max-w-sm -translate-y-1/2 pointer-events-none"
+          className="absolute left-6 right-6 sm:left-12 sm:right-auto md:left-20 top-[77%] z-30 max-w-xs sm:max-w-sm pointer-events-none"
         >
           <p className="font-serif-reading text-2xl sm:text-3xl md:text-4xl italic leading-tight text-[#C06A4B] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
             “I build things that work.”
