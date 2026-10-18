@@ -17,7 +17,15 @@ const skillSets = [
 ];
 
 export function App() {
- const [intro,setIntro]=useState(true);
+ const [intro,setIntro]=useState(()=>{
+  if(typeof window==='undefined') return false;
+  try { return !window.localStorage.getItem('sathya-portfolio-intro-seen') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  catch { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+ });
+ const completeIntro=()=>{
+  try { window.localStorage.setItem('sathya-portfolio-intro-seen','1'); } catch { /* Storage may be disabled; continue without blocking the site. */ }
+  setIntro(false);
+ };
  const [resumeOpen,setResumeOpen]=useState(false);
  const [chosenProject,setChosenProject]=useState<ProjectCaseStudy|null>(null);
  const [menuOpen,setMenuOpen]=useState(false);
@@ -26,7 +34,7 @@ export function App() {
  useEffect(()=>{const observer=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');if(entry.target.id)setActive(entry.target.id)}})},{threshold:0.12,rootMargin:'0px 0px -8% 0px'});document.querySelectorAll('.reveal, section[id]').forEach((node)=>observer.observe(node));return()=>observer.disconnect()},[intro]);
  const copyEmail=async()=>{try{await navigator.clipboard.writeText(portfolioData.email);setCopied(true);window.setTimeout(()=>setCopied(false),1800)}catch{window.location.href='mailto:'+portfolioData.email}};
  return <SmoothScrollProvider><div className="portfolio-shell">
- {intro&&<CinematicOpeningSequence onComplete={()=>setIntro(false)}/>}<ProgressBar/>
+ {intro&&<CinematicOpeningSequence onComplete={completeIntro}/>}<ProgressBar/>
  <header className="new-header"><a className="new-brand" href="#hero"><span className="brand-monogram">S<span>.</span></span><span>SATHYA SAI JS<small>DEVELOPER / SECURITY / DATA</small></span></a><nav className={menuOpen?'new-nav nav-open':'new-nav'}>{links.map((link,index)=><a key={link.id} className={active===link.id?'nav-active':''} href={'#'+link.id} onClick={()=>setMenuOpen(false)}><small>0{index+1}</small>{link.name}</a>)}<button onClick={()=>setResumeOpen(true)}>Résumé <ArrowUpRight size={15}/></button></nav><button className="new-menu" onClick={()=>setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen?<X/>:<Menu/>}</button></header>
  <main>
  <section id="hero" className="new-hero"><div className="hero-overline"><span><i/> OPEN TO LEARNING & OPPORTUNITIES</span><span>CHENNAI, INDIA / IST</span></div><div className="new-hero-grid"><div className="new-hero-copy"><p className="new-eyebrow">A PRACTICAL MINDSET FOR DIGITAL PROBLEMS</p><h1>Curious by<br/>nature. <em>Built</em><br/>to <span>solve.</span></h1><p className="new-intro">I'm <b>Sathya Sai JS</b> — a developer and Cyber Security student who enjoys turning complex ideas into useful, thoughtful digital experiences.</p><div className="new-actions"><a className="accent-button" href="#work">Explore my work <ArrowUpRight size={17}/></a><button className="text-button" onClick={()=>setResumeOpen(true)}>View résumé ↗</button></div><div className="new-socials"><a href="https://github.com/satboy-12" target="_blank" rel="noreferrer"><Github/> GitHub</a><a href="https://www.linkedin.com/in/sathya-sai-j-s-1187b5399" target="_blank" rel="noreferrer"><Linkedin/> LinkedIn</a><a href={'mailto:'+portfolioData.email}><Mail/> Email</a></div></div><div className="new-portrait-wrap"><div className="new-portrait"><img src="/images/sathya-portfolio-photo.jpg" alt="Sathya Sai JS" fetchPriority="high"/><span className="portrait-badge">LEARN<br/>BUILD<br/>REFINE</span><div className="portrait-bottom"><span>FIG. 01</span><span>IN PROGRESS, ALWAYS.</span></div></div><div className="portrait-orbit"/><div className="portrait-note">THOUGHTFUL WORK.<br/><b>PRACTICAL IMPACT.</b></div></div></div><div className="hero-foot"><span>↓ SCROLL TO EXPLORE</span><span>BUILD WITH INTENTION. KEEP GETTING BETTER.</span><span>© 2026</span></div></section>
